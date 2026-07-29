@@ -6,10 +6,6 @@ class Todo {
   Todo({required this.id, required this.text, this.isCompleted = false});
 
   Todo toogleCompletion() {
-    return Todo(
-      id: id,
-      text: text, 
-      isCompleted: !isCompleted
-    );
+    return Todo(id: id, text: text, isCompleted: !isCompleted);
   }
 }

@@ -11,7 +11,10 @@ class TodoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(todo.text, style: TextStyle(decoration: todo.isCompleted ? .lineThrough : .none)),
+      title: Text(
+        todo.text,
+        style: TextStyle(decoration: todo.isCompleted ? .lineThrough : .none),
+      ),
       leading: Checkbox(
         value: todo.isCompleted,
         onChanged: (value) => context.read<TodoCubit>().toggleCompletion(todo),

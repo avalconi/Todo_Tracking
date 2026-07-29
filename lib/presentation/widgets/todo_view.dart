@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:todo_flutter/domain/models/todo.dart';
 import 'package:todo_flutter/presentation/bloc/todo_cubit.dart';
+import 'package:todo_flutter/presentation/bloc/todo_state.dart';
 import 'package:todo_flutter/presentation/widgets/todo_tile.dart';
 
 class TodoView extends StatelessWidget {
@@ -38,7 +38,9 @@ class TodoView extends StatelessWidget {
                 Navigator.of(context).pop();
               }
             },
-            style: TextButton.styleFrom(backgroundColor: Theme.of(context).highlightColor),
+            style: TextButton.styleFrom(
+              backgroundColor: Theme.of(context).highlightColor,
+            ),
             child: const Text('Add'),
           ),
         ],
@@ -53,19 +55,30 @@ class TodoView extends StatelessWidget {
         onPressed: () => _showAddTodoBox(context),
         child: const Icon(Icons.add),
       ),
-      body: BlocBuilder<TodoCubit, List<Todo>>(
-        builder: (context, todos) {
-          if (todos.isEmpty) {
-            return const Center(child: Text('No todo yet'));
+      body: BlocBuilder<TodoCubit, TodoState>(
+        builder: (context, state) {
+          if (state is TodoLoading) {
+            return const Center(child: CircularProgressIndicator());
           }
-          return ListView.builder(
-            itemCount: todos.length,
-            itemBuilder: (context, index) {
-              final todo = todos[index];
 
-              return TodoTile(todo: todo);
-            },
-          );
+          if (state is TodoError) {
+            return Center(child: Text(state.message));
+          }
+
+          if (state is TodoLoaded) {
+            if (state.todos.isEmpty) {
+              return const Center(child: Text('No todo yet'));
+            }
+            return ListView.builder(
+              itemCount: state.todos.length,
+              itemBuilder: (context, index) {
+                final todo = state.todos[index];
+
+                return TodoTile(todo: todo);
+              },
+            );
+          }
+          return const SizedBox.shrink();
         },
       ),
     );

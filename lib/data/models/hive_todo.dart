@@ -12,6 +12,10 @@ class HiveTodo {
   }
 
   static HiveTodo fromDomain(Todo todo) {
-    return HiveTodo(id: todo.id, text: todo.text, isCompleted: todo.isCompleted);
+    return HiveTodo(
+      id: todo.id,
+      text: todo.text,
+      isCompleted: todo.isCompleted,
+    );
   }
 }

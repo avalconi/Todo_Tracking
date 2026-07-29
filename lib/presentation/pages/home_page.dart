@@ -5,15 +5,12 @@ import 'package:todo_flutter/presentation/bloc/todo_cubit.dart';
 import 'package:todo_flutter/presentation/widgets/todo_view.dart';
 
 class HomePage extends StatelessWidget {
-  final TodoRepo todoRepo;
-
-  const HomePage({super.key, required this.todoRepo});
+  const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-
-    return BlocProvider(
-      create: (context) => TodoCubit(todoRepo: todoRepo),
+    return BlocProvider<TodoCubit>(
+      create: (context) => TodoCubit(todoRepo: context.read<TodoRepo>()),
       child: const TodoView(),
     );
   }

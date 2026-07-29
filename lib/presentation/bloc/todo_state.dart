@@ -1,4 +1,3 @@
-
 import 'package:todo_flutter/domain/models/todo.dart';
 
 sealed class TodoState {
@@ -17,7 +16,6 @@ class TodoLoaded extends TodoState {
 
 class TodoError extends TodoState {
   final String message;
-  
+
   const TodoError(this.message);
 }
-

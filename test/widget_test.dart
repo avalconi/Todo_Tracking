@@ -7,15 +7,14 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:todo_flutter/data/repository/hive_todo_repo.dart';
 
 import 'package:todo_flutter/main.dart';
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
 
-    // Build our app and trigger a frame.
-    // await tester.pumpWidget(const MyApp(todoRepo: todoRepo,));
+    // Build our app and trigger a frame
+    await tester.pumpWidget(const MyApp());
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

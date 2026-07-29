@@ -1,6 +1,6 @@
 /*
 functions of todo, get, add, update, delete
-*/ 
+*/
 
 import 'package:todo_flutter/domain/models/todo.dart';
 

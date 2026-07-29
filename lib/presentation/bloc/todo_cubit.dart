@@ -1,39 +1,58 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_flutter/domain/models/todo.dart';
 import 'package:todo_flutter/domain/repository/todo_repo.dart';
+import 'package:todo_flutter/presentation/bloc/todo_state.dart';
 
-class TodoCubit extends Cubit<List<Todo>> {
+class TodoCubit extends Cubit<TodoState> {
   final TodoRepo todoRepo;
 
-  TodoCubit({required this.todoRepo}) : super([]) {
+  TodoCubit({required this.todoRepo}) : super(const TodoLoading()) {
     loadTodos();
   }
 
   Future<void> loadTodos() async {
-    final todoList = await todoRepo.getTodos();
+    try {
+      final todoList = await todoRepo.getTodos();
 
-    emit(todoList); 
+      emit(TodoLoaded(todoList));
+    } catch (e) {
+      emit(TodoError(e.toString()));
+    }
   }
 
   Future<void> addTodo(String text) async {
-    final newTodo = Todo(id: DateTime.now().millisecondsSinceEpoch, text: text);
+    try {
+      final newTodo = Todo(
+        id: DateTime.now().millisecondsSinceEpoch,
+        text: text,
+      );
 
-    await todoRepo.addTodo(newTodo);
-
-    loadTodos();
+      await todoRepo.addTodo(newTodo);
+      loadTodos();
+    } catch (e) {
+      emit(TodoError(e.toString()));
+    }
   }
 
   Future<void> deleteTodo(Todo todo) async {
-    await todoRepo.deleteTodo(todo);
+    try {
+      await todoRepo.deleteTodo(todo);
 
-    loadTodos(); 
+      loadTodos();
+    } catch (e) {
+      emit(TodoError(e.toString()));
+    }
   }
 
   Future<void> toggleCompletion(Todo todo) async {
-    final updateTodo = todo.toogleCompletion();
+    try {
+      final updateTodo = todo.toogleCompletion();
 
-    await todoRepo.updateTodo(updateTodo);
+      await todoRepo.updateTodo(updateTodo);
 
-    loadTodos();
+      loadTodos();
+    } catch (e) {
+      emit(TodoError(e.toString()));
+    }
   }
 }
