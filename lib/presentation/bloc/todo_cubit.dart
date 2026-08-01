@@ -21,6 +21,8 @@ class TodoCubit extends Cubit<TodoState> {
   }
 
   Future<void> addTodo(String text) async {
+    if (text.isEmpty) return;
+
     try {
       final newTodo = Todo(
         id: DateTime.now().millisecondsSinceEpoch,
@@ -37,6 +39,18 @@ class TodoCubit extends Cubit<TodoState> {
   Future<void> deleteTodo(Todo todo) async {
     try {
       await todoRepo.deleteTodo(todo);
+
+      loadTodos();
+    } catch (e) {
+      emit(TodoError(e.toString()));
+    }
+  }
+
+  Future<void> updateTodo(int id, String text) async {
+    Todo todo = Todo(id: id, text: text);
+
+    try {
+      await todoRepo.updateTodo(todo);
 
       loadTodos();
     } catch (e) {
