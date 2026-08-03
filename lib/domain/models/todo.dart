@@ -1,11 +1,26 @@
 class Todo {
-  final int id;
+  final String id;
   final String text;
   final bool isCompleted;
+  final String? projectId;
 
-  Todo({required this.id, required this.text, this.isCompleted = false});
+  Todo({
+    required this.id,
+    required this.text,
+    this.isCompleted = false,
+    this.projectId,
+  });
+
+  Todo copyWith({String? id, String? text, bool? isCompleted, String? projectId}) {
+    return Todo(
+      id: id ?? this.id,
+      text: text ?? this.text,
+      isCompleted: isCompleted ?? this.isCompleted,
+      projectId: projectId ?? this.projectId,
+    );
+  }
 
   Todo toogleCompletion() {
-    return Todo(id: id, text: text, isCompleted: !isCompleted);
+    return copyWith(isCompleted: !isCompleted);
   }
 }

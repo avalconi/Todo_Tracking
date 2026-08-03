@@ -24,11 +24,17 @@ class _TodoTextDialogState extends State<TodoTextDialog> {
 
     return AlertDialog(
       title: Text(isUpdate ? ' Update Todo' : 'Add Todo'),
-      content: TextField(
-        controller: textController,
-        decoration: const InputDecoration(hintText: 'here...'),
-        autofocus: true,
-        onSubmitted: (value) => Navigator.pop(context),
+      content: Column(
+        mainAxisSize: .min,        
+        children: [
+          TextField(
+            controller: textController,
+            decoration: const InputDecoration(hintText: 'here...'),
+            autofocus: true,
+            onSubmitted: (value) => Navigator.pop(context),
+          ),
+          // DropdownButtonFormField(items: items, onChanged: onChanged)
+        ],
       ),
       actions: [
         TextButton(

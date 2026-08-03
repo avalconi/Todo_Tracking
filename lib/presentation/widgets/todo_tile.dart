@@ -31,7 +31,7 @@ class TodoTile extends StatelessWidget {
                 builder: (_) => TodoTextDialog(editText: todo.text),
               );
               if (text != null) {
-                await todoCubit.updateTodo(todo.id, text);
+                await todoCubit.updateTodo(todo.id, text,);
               }
             },
             icon: const Icon(Icons.mode_edit_outline),

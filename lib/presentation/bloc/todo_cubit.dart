@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nanoid_plus/nanoid_plus.dart';
 import 'package:todo_flutter/domain/models/todo.dart';
 import 'package:todo_flutter/domain/repository/todo_repo.dart';
 import 'package:todo_flutter/presentation/bloc/todo_state.dart';
@@ -24,10 +25,7 @@ class TodoCubit extends Cubit<TodoState> {
     if (text.isEmpty) return;
 
     try {
-      final newTodo = Todo(
-        id: DateTime.now().millisecondsSinceEpoch,
-        text: text,
-      );
+      final newTodo = Todo(id: const Nanoid().urlSafe(length: 10), text: text);
 
       await todoRepo.addTodo(newTodo);
       loadTodos();
@@ -46,8 +44,8 @@ class TodoCubit extends Cubit<TodoState> {
     }
   }
 
-  Future<void> updateTodo(int id, String text) async {
-    Todo todo = Todo(id: id, text: text);
+  Future<void> updateTodo(String id, String text, [String? projectId]) async {
+    Todo todo = Todo(id: id, text: text, projectId: projectId);
 
     try {
       await todoRepo.updateTodo(todo);

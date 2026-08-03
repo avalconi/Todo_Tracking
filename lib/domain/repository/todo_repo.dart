@@ -2,6 +2,7 @@
 functions of todo, get, add, update, delete
 */
 
+import 'package:todo_flutter/domain/models/project.dart';
 import 'package:todo_flutter/domain/models/todo.dart';
 
 abstract class TodoRepo {
@@ -12,4 +13,8 @@ abstract class TodoRepo {
   Future<void> updateTodo(Todo todo);
 
   Future<void> deleteTodo(Todo todo);
+
+  Future<void> getTodosByProject(Project project);
+
+  Future<void> completeAllByProject(Project project);
 }

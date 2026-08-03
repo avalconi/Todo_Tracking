@@ -7,12 +7,14 @@ import 'package:todo_flutter/hive/hive_adapters.dart';
 
 extension HiveRegistrar on HiveInterface {
   void registerAdapters() {
+    registerAdapter(HiveProjectAdapter());
     registerAdapter(HiveTodoAdapter());
   }
 }
 
 extension IsolatedHiveRegistrar on IsolatedHiveInterface {
   void registerAdapters() {
+    registerAdapter(HiveProjectAdapter());
     registerAdapter(HiveTodoAdapter());
   }
 }

@@ -3,7 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:todo_flutter/core/database/hive_database.dart';
 import 'package:todo_flutter/core/theme/theme.dart';
 import 'package:todo_flutter/core/theme/theme_cubit.dart';
+import 'package:todo_flutter/data/repository/hive_project_repo.dart';
 import 'package:todo_flutter/data/repository/hive_todo_repo.dart';
+import 'package:todo_flutter/domain/repository/project_repo.dart';
 import 'package:todo_flutter/domain/repository/todo_repo.dart';
 import 'package:todo_flutter/presentation/pages/home_page.dart';
 
@@ -12,8 +14,15 @@ void main() async {
   await HiveDatabase.init();
 
   runApp(
-    RepositoryProvider<TodoRepo>(
-      create: (_) => HiveTodoRepo(HiveDatabase.todoBox),
+    MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider<TodoRepo>(
+          create: (_) => HiveTodoRepo(HiveDatabase.todoBox),
+        ),
+        RepositoryProvider<ProjectRepo>(
+          create: (_) => HiveProjectRepo(HiveDatabase.projectBox),
+        ),
+      ],
       child: BlocProvider(create: (_) => ThemeCubit(), child: const MyApp()),
     ),
   );

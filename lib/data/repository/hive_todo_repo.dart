@@ -1,5 +1,6 @@
 import 'package:hive_ce/hive_ce.dart';
 import 'package:todo_flutter/data/models/hive_todo.dart';
+import 'package:todo_flutter/domain/models/project.dart';
 import 'package:todo_flutter/domain/models/todo.dart';
 import 'package:todo_flutter/domain/repository/todo_repo.dart';
 
@@ -10,9 +11,19 @@ class HiveTodoRepo implements TodoRepo {
 
   @override
   Future<List<Todo>> getTodos() async {
-    // final List<HiveTodo> todoList = (box.get('todo_list') as List?)?.cast<HiveTodo>() ?? [];
+    return box.values
+        .cast<HiveTodo>()
+        .map((element) => element.toDomain())
+        .toList();
+  }
 
-    return box.values.cast<HiveTodo>().map((e) => e.toDomain()).toList();
+  @override
+  Future<List<Todo>> getTodosByProject(project) async {
+    return box.values
+        .cast<HiveTodo>()
+        .where((element) => element.projectId == project.id)
+        .map((element) => element.toDomain())
+        .toList();
   }
 
   @override
@@ -26,7 +37,24 @@ class HiveTodoRepo implements TodoRepo {
   }
 
   @override
-  Future<void> deleteTodo(Todo todo) {
+  Future<void> deleteTodo(Todo todo) async {
     return box.delete(todo.id.toString());
+  }
+
+  @override
+  Future<void> completeAllByProject(Project project) async {
+    final projectTodos = await getTodosByProject(project);
+
+    for (final todo in projectTodos) {
+      await box.put(
+        todo.id.toString(),
+        HiveTodo(
+          id: todo.id,
+          text: todo.text,
+          isCompleted: true,
+          projectId: todo.projectId,
+        ),
+      );
+    }
   }
 }
