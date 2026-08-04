@@ -5,6 +5,7 @@ import 'package:todo_flutter/domain/repository/project_repo.dart';
 
 class ProjectCubit extends Cubit<List<Project>> {
   final ProjectRepo projectRepo;
+  late List<Project> allProjects;
 
   ProjectCubit({required this.projectRepo}) : super([]) {
     loadProjects();
@@ -12,13 +13,17 @@ class ProjectCubit extends Cubit<List<Project>> {
 
   Future<void> loadProjects() async {
     final projectList = await projectRepo.getProjects();
+    allProjects = projectList;
     emit(projectList);
   }
 
   Future<void> addProject(String name) async {
     if (name.isEmpty) return;
 
-    final newProject = Project(id: const Nanoid().urlSafe(length: 10), name: name);
+    final newProject = Project(
+      id: const Nanoid().urlSafe(length: 10),
+      name: name,
+    );
 
     await projectRepo.addProject(newProject);
     loadProjects();
@@ -35,6 +40,4 @@ class ProjectCubit extends Cubit<List<Project>> {
     await projectRepo.renameProject(project);
     loadProjects();
   }
-  
-
-  }
+}

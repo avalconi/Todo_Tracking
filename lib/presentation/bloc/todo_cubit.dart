@@ -21,11 +21,15 @@ class TodoCubit extends Cubit<TodoState> {
     }
   }
 
-  Future<void> addTodo(String text) async {
+  Future<void> addTodo(String text, String? projectId) async {
     if (text.isEmpty) return;
 
     try {
-      final newTodo = Todo(id: const Nanoid().urlSafe(length: 10), text: text);
+      final newTodo = Todo(
+        id: const Nanoid().urlSafe(length: 10),
+        text: text,
+        projectId: projectId,
+      );
 
       await todoRepo.addTodo(newTodo);
       loadTodos();

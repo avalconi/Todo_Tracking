@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todo_flutter/domain/models/todo_dialog_result.dart';
 import 'package:todo_flutter/domain/repository/project_repo.dart';
 import 'package:todo_flutter/domain/repository/todo_repo.dart';
 import 'package:todo_flutter/presentation/bloc/project_cubit.dart';
@@ -24,10 +25,14 @@ class HomePage extends StatelessWidget {
         ),
       ],
       child: Builder(
+        // to pass the created blocproviders to FAB
         builder: (context) {
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Tracking Todo', style: TextStyle(fontSize: 40)),
+              title: const Text(
+                'Tracking Todo',
+                style: TextStyle(fontSize: 40),
+              ),
               centerTitle: true,
             ),
             floatingActionButton: FloatingActionButton(
@@ -35,17 +40,18 @@ class HomePage extends StatelessWidget {
               shape: const CircleBorder(),
               onPressed: () async {
                 final todoCubit = context.read<TodoCubit>();
-                final text = await showDialog(
+                final projects = context.read<ProjectCubit>().state;
+                final result = await showDialog<TodoDialogResult>(
                   context: context,
-                  builder: (_) => const TodoTextDialog(),
+                  builder: (_) => TodoTextDialog(projects: projects),
                 );
-                if (text != null) {
-                  await todoCubit.addTodo(text);
+                if (result != null) {
+                  await todoCubit.addTodo(result.text, result.projectId);
                 }
               },
               child: const Icon(Icons.add),
             ),
-          
+
             drawer: const AppDrawer(),
             body: const Column(
               children: [
@@ -54,7 +60,7 @@ class HomePage extends StatelessWidget {
               ],
             ),
           );
-        }
+        },
       ),
     );
   }
